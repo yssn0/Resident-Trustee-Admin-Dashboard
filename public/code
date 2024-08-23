@@ -1,0 +1,205 @@
+/*
+in src/app/reclamations/page.tsx (Server Component)
+import ReclamationListWrapper from './reclamationListWrapper';
+
+export default function ReclamationsPage() {
+  return (
+    <div>
+      <h1>Reclamation Management</h1>
+      <ReclamationListWrapper />
+    </div>
+  );
+}
+in src\app\reclamations\reclamationList.tsx
+'use client';
+
+import { useReclamations } from '@/hooks/useReclamations';
+import { Reclamation } from '@/types/reclamation';
+
+export default function ReclamationList() {
+  const { reclamations, loading, error } = useReclamations();
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+
+  return (
+    <ul>
+    {reclamations.map((reclamation: Reclamation) => (
+      <li key={reclamation._id.toString()}>
+        <p>Problem: {reclamation.problem}</p>
+        <p>Status: {reclamation.status}</p>
+        <p>User ID: {reclamation.userId?.toString()}</p>
+        <p>Syndic ID: {reclamation.syndicId?.toString()}</p>
+        <p><strong>Date:</strong> {reclamation.date ? new Date(reclamation.date).toLocaleString() : 'N/A'}</p>
+          <p><strong>Is Open:</strong> {reclamation.isOpen ? 'Yes' : 'No'}</p>
+          <p><strong>Comment:</strong> {reclamation.commentaire || 'N/A'}</p>
+          <p><strong>Color:</strong> {reclamation.color || 'N/A'}</p>
+          {reclamation.imageUrl && (
+            <div>
+              <p><strong>Image:</strong></p>
+              <img src={reclamation.imageUrl} alt="Reclamation" style={{maxWidth: '200px'}} />
+            </div>
+          )}
+          {reclamation.imageConfirmedUrl && (
+            <div>
+              <p><strong>Confirmed Image:</strong></p>
+              <img src={reclamation.imageConfirmedUrl} alt="Confirmed" style={{maxWidth: '200px'}} />
+            </div>
+          )}
+      </li>
+    ))}
+  </ul>
+  );
+}
+in src\app\reclamations\reclamationListWrapper.tsx
+//client component
+'use client';
+
+import ReclamationList from './reclamationList';
+
+export default function ReclamationListWrapper() {
+  return <ReclamationList />;
+}
+
+in src\hooks\useReclamations.ts
+
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setReclamations } from '@/redux/slices/reclamationSlice';
+import { RootState } from '@/redux/store';
+
+export function useReclamations() {
+  const dispatch = useDispatch();
+  const reclamations = useSelector((state: RootState) => state.reclamation.reclamations);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchReclmations() {
+      try {
+        const response = await fetch('/api/reclamation_api');
+        if (!response.ok) {
+          throw new Error('Failed to fetch reclmations');
+        }
+        const reclamationData = await response.json();
+        dispatch(setReclamations(reclamationData));
+        setLoading(false);
+      } catch (err) {
+        console.error("Failed to fetch reclmations", err);
+        setError("Failed to fetch reclmations");
+        setLoading(false);
+      }
+    }
+
+    fetchReclmations();
+  }, [dispatch]);
+
+  return { reclamations, loading, error };
+}
+
+
+in src\pages\api\reclamation_api.ts
+
+import type { NextApiRequest, NextApiResponse } from 'next'
+import { app, loginAdmin } from '../../lib/realm'
+import { Reclamation } from '../../types/reclamation'
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse<Reclamation[] | { error: string }>
+) {
+  if (req.method === 'GET') {
+    try {
+      const user = await loginAdmin();
+      const mongodb = user.mongoClient("mongodb-atlas");
+      const collection = mongodb.db("vervedb").collection("Reclamation");
+      const results = await collection.find();
+      
+      // Convert MongoDB date to JavaScript Date
+      const formattedResults = results.map(rec => ({
+        ...rec,
+        date: rec.date ? new Date(rec.date).toISOString() : undefined
+      }));
+
+      res.status(200).json(formattedResults);
+    } catch (error) {
+      console.error("Failed to fetch reclamations", error);
+      res.status(500).json({ error: 'Failed to fetch reclamations' });
+    }
+  } else {
+    res.setHeader('Allow', ['GET']);
+    res.status(405).end(`Method ${req.method} Not Allowed`);
+  }
+}
+
+
+in // src/redux/slices/reclamationSlice.ts
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Reclamation } from '../../types/reclamation';
+
+interface ReclamationState {
+  reclamations: Reclamation[];
+}
+
+const initialState: ReclamationState = {
+  reclamations: [],
+};
+
+export const reclamationSlice = createSlice({
+  name: 'reclamation',
+  initialState,
+  reducers: {
+    setReclamations: (state, action: PayloadAction<Reclamation[]>) => {
+      state.reclamations = action.payload;
+    },
+  },
+});
+
+export const { setReclamations } = reclamationSlice.actions;
+
+export default reclamationSlice.reducer;
+
+in // src/redux/provider.tsx
+'use client';
+
+import { Provider } from 'react-redux';
+import { store } from './store';
+
+export function Providers({ children }: { children: React.ReactNode }) {
+  return <Provider store={store}>{children}</Provider>;
+}
+
+in // src/redux/store.ts
+import { configureStore } from '@reduxjs/toolkit';
+import reclamationReducer from './slices/reclamationSlice';
+import appUserReducer from './slices/appUserSlice';
+
+export const store = configureStore({
+  reducer: {
+    reclamation: reclamationReducer,
+    appUser: appUserReducer,
+  },
+});
+
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
+
+in // src\types\reclamation.ts
+
+import * as Realm from 'realm-web';
+
+export interface Reclamation {
+  _id: Realm.BSON.ObjectId;
+  color?: string;
+  commentaire?: string;
+  date?: Date;
+  imageConfirmedUrl?: string;
+  imageUrl: string;
+  isOpen?: boolean;
+  problem?: string;
+  status?: string;
+  syndicId?: Realm.BSON.ObjectId;
+  userId?: Realm.BSON.ObjectId;
+}
+
+*/
