@@ -1,4 +1,4 @@
-// src/app/reclamations/layout.tsx
+// src/app/users/layout.tsx
 import Sidebar from '../../components/dashboard/Sidebar';
 import UsersDashboardHeader from '../../components/dashboard/UserHeader';
 

@@ -150,13 +150,13 @@ export default function ReclamationDetails({ reclamation, appUsers, onClose }: R
           </div>
           <div className="flex-1 space-y-3 sm:space-y-4">
             <div><strong>Problème:</strong> <span>{reclamation.problem}</span></div>
-            <div><strong>Utilisateur:</strong> <span>{getUserName(reclamation.userId!)}</span></div>
+            <div><strong>Résident:</strong> <span>{getUserName(reclamation.userId!)}</span></div>
             <div><strong>Date:</strong> <span>{reclamation.date?.toLocaleString()}</span></div>
             <div><strong>Syndic:</strong> <span>{reclamation.syndicId ? getUserName(reclamation.syndicId) : 'Non assigné'}</span></div>
             <div><strong>Commentaire:</strong> <span>{reclamation.commentaire}</span></div>
-            <div><strong>Commentaire de réaction:</strong> <span>{reclamation.reactionComment}</span></div>
+            <div><strong>Avis sur la solution:</strong> <span>{reclamation.reactionComment}</span></div>
             <div className="flex items-center">
-              <strong>Niveau de satisfaction:</strong>
+              <strong>Réaction:</strong>
               <span className="ml-2">{getSatisfactionImage(reclamation.satisfactionLevel)}</span>
             </div>
           </div>
@@ -164,15 +164,15 @@ export default function ReclamationDetails({ reclamation, appUsers, onClose }: R
   
         <div className="mt-8 space-y-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Commentaire Syndic:</label>
-            <div className="relative">
-              <textarea
-                value={syndicComment}
-                onChange={(e) => setSyndicComment(e.target.value)}
-                className="block w-full px-3 py-2 text-gray-700 border rounded-lg shadow-sm focus:outline-none focus:border-blue-500 resize-none"
-                rows={3}
-                placeholder="Enter your comment here..."
-              />
+          <label className="block text-sm font-extrabold text-black-800 mb-5">Commentaire Syndic:</label>
+          <div className="relative">
+            <textarea
+              value={syndicComment}
+              onChange={(e) => setSyndicComment(e.target.value)}
+              className="block w-full px-3 py-2 text-gray-700 border rounded-lg shadow-sm focus:outline-none focus:border-blue-500 resize-none"
+              rows={3}
+              placeholder="Entrez votre commentaire ici..."
+            />
               {syndicComment && (
                 <button
                   onClick={handleDeleteComment}
@@ -186,7 +186,7 @@ export default function ReclamationDetails({ reclamation, appUsers, onClose }: R
 
           {imageConfirmedUrl && (
             <div>
-              <h3 className="font-semibold mb-2">Image confirmée:</h3>
+              <h3 className="font-semibold mb-5">Image du Problème Résolu:</h3>
               <div className="relative">
                 <img
                   src={imageConfirmedUrl}
@@ -203,18 +203,19 @@ export default function ReclamationDetails({ reclamation, appUsers, onClose }: R
             </div>
           )}
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Statut:</label>
-            <select
-              value={status}
-              onChange={(e) => setStatus(e.target.value)}
-              className="block w-full px-3 py-2 text-gray-700 border rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
-            >
-              <option value="Ouverte">Ouverte</option>
-              <option value="Prise en charge">Prise en charge</option>
-              <option value="Traité">Traité</option>
-            </select>
-          </div>
+            <div>
+              <label className="block text-sm font-extrabold text-black-800 mb-1">Statut:</label>
+                <select
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                  className="block w-full px-3 py-2 text-gray-700 border rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
+                >
+                  <option value="Ouverte">Ouverte</option>
+                  <option value="Prise en charge">Prise en charge</option>
+                  <option value="Traité">Traité</option>
+                </select>
+            </div>
+
 
           <div className="flex justify-end space-x-4 mt-6">
             <button

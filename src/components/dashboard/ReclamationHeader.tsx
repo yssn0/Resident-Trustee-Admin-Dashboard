@@ -16,8 +16,6 @@ export default function DashboardHeader() {
   return (
     <header className="bg-white shadow-md py-4 px-6 sticky top-0 z-10">
       <div className="flex items-center justify-between mb-4">
-        {/*<h1 className="text-xl font-semibold text-gray-800">Admin Dashboard</h1>*/}
-        {/* Add user profile or logout button here */}
       </div>
       <nav className="flex space-x-4">
         {tabs.map((tab) => (
