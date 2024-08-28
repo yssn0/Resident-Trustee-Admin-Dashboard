@@ -23,7 +23,7 @@ export default function ReclamationList() {
 
   if (loading) return <LoadingSpinner />;
   if (error) return <div>Error: {error}</div>;
-  if (!reclamations || reclamations.length === 0) return <div>No reclamations found.</div>;
+  if (!reclamations || reclamations.length === 0) return <div>Aucune réclamation trouvée.</div>;
 
   const sortedReclamations = [...reclamations].sort((a, b) => {
     if (a[sortBy] && b[sortBy]) {

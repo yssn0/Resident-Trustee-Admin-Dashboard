@@ -5,6 +5,8 @@ import "./globals.css";
 import { Providers } from '../redux/provider';
 import { UserProvider } from '@auth0/nextjs-auth0/client';
 import Header from '@/components/Header';
+import ScrollToTop from '@/components/ScrollToTop';
+
 
 const inter = Inter({ subsets: ["latin"] });
 const publicSans = Public_Sans({ subsets: ["latin"], variable: '--font-public-sans' });
@@ -24,6 +26,7 @@ export default function RootLayout({
           <Providers>
             <Header />
             <main className="flex-grow">
+            <ScrollToTop />
               {children}
             </main>
           </Providers>

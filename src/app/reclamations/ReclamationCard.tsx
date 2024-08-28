@@ -44,8 +44,8 @@ export default function ReclamationCard({ reclamation, onAssign, onViewDetails }
       </div>
     
       <h3 className="text-lg font-semibold mb-2">{reclamation.problem || 'Unknown Problem'}</h3>
-      <p className="text-sm text-gray-600 mb-2">Status: {reclamation.status || 'Unknown'}</p>
-      <p className="text-sm text-gray-600 mb-4">Date: {reclamation.date?.toLocaleString() || 'Unknown'}</p>
+      <p className="text-sm text-gray-600 mb-2">Statut : {reclamation.status || 'Unknown'}</p>
+      <p className="text-sm text-gray-600 mb-4">Date : {reclamation.date?.toLocaleString() || 'Unknown'}</p>
       <div className="flex justify-between">
         <Tooltip content={isAssignable ? "" : "Cette réclamation a déjà été traitée"}>
           <button

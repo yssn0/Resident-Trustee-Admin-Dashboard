@@ -3,7 +3,9 @@
 import { useEffect, useState } from 'react';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { useRouter } from 'next/navigation';
-import LoadingSpinner from '@/components/ui/LoadingSpinner'; 
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import DashboardContent from '@/components/dashboard/DashboardContent';
+import ScrollToTop from '@/components/ScrollToTop';
 
 export default function Home() {
   const { user, error, isLoading } = useUser();
@@ -11,21 +13,14 @@ export default function Home() {
   const [loadingState, setLoadingState] = useState('initial');
 
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
-
     if (!isLoading) {
-      if (user) {
+      if (!user) {
         setLoadingState('redirecting');
-        timeoutId = setTimeout(() => router.push('/dashboard'), 100);
+        router.push('/api/auth/login');
       } else {
-        setLoadingState('redirecting');
-        timeoutId = setTimeout(() => router.push('/api/auth/login'), 100);
+        setLoadingState('loaded');
       }
     }
-
-    return () => {
-      if (timeoutId) clearTimeout(timeoutId);
-    };
   }, [user, isLoading, router]);
 
   if (isLoading || loadingState === 'initial') {
@@ -36,6 +31,9 @@ export default function Home() {
     return <div>Error: {error.message}</div>;
   }
 
-  //return <div>Redirecting...</div>;
-  return <LoadingSpinner />;
+  if (loadingState === 'redirecting') {
+    return <LoadingSpinner />;
+  }
+
+  return <DashboardContent />;
 }

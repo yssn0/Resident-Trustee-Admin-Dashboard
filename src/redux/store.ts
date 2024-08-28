@@ -5,6 +5,8 @@ import reclamationReducer from './slices/reclamationSlice';
 import appUserReducer from './slices/appUserSlice';
 import notificationReducer from './slices/notificationSlice';
 import sponsorshipReducer from './slices/sponsorshipSlice';
+import accessRequestReducer from './slices/accessRequestSlice';
+
 
 
 export const store = configureStore({
@@ -13,6 +15,8 @@ export const store = configureStore({
     appUser: appUserReducer,
     notification: notificationReducer,
     sponsorship: sponsorshipReducer,
+    accessRequest: accessRequestReducer,
+
   },
 });
 

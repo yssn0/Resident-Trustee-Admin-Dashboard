@@ -127,7 +127,7 @@ export default function UserDetails({ user, onClose }: UserDetailsProps) {
               onChange={handleInputChange}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
             >
-          <option value="user">User</option>
+          <option value="user">Réseident</option>
           <option value="syndic">Syndic</option>
         </select>
           </div>
