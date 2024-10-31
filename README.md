@@ -40,14 +40,14 @@ The **Resident-Trustee Admin Website** is a comprehensive platform for administr
 - **Frontend & Backend**: Next.js with TypeScript — serves both the client interface and backend API routes for streamlined integration.
 - **State Management**: Redux with React Hooks for efficient and centralized state handling across the admin dashboard.
 - **Authentication**: Auth0 for secure user authentication and authorization.
-- **Database & Sync**: MongoDB Realm for data storage and real-time synchronization, seamlessly integrated with the Verve App.
+- **Database & Sync**: MongoDB Realm for data storage and real-time synchronization, seamlessly integrated with the mobile app.
 - **Styling**: Tailwind CSS for a responsive, consistent design across all devices.
 
 --- 
 
 ## Getting Started
 
-Follow these steps to set up the Verve Admin Website on your local machine.
+Follow these steps to set up the Admin Website on your local machine.
 
 ### Prerequisites
 - **Node.js**: v14.x or later
@@ -96,7 +96,7 @@ Follow these steps to set up the Verve Admin Website on your local machine.
 ### MongoDB Realm Configuration
 1. Go to [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) and create an account.
 2. Create a cluster and a Realm application.
-3. Configure Realm sync to connect the Verve App database.
+3. Configure Realm sync to connect the mobile app database.
 
 ### Auth0 Configuration
 1. Go to [Auth0](https://auth0.com/) and sign in.
@@ -109,6 +109,6 @@ Follow these steps to set up the Verve Admin Website on your local machine.
 
 Once the server is running:
 1. Access the login page with demo credentials to explore the admin dashboard.
-2. Use the dashboard to manage claims, users, and monitor real-time updates from the Verve App.
+2. Use the dashboard to manage claims, users, and monitor real-time updates from the mobile app.
 
 ---
