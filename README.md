@@ -18,7 +18,6 @@ The **Resident-Trustee Admin Website** is a comprehensive platform for administr
 
 ## Features
 
-### For Administrators
 - **User Management**
   - Create and manage user accounts
   - Handle access requests
